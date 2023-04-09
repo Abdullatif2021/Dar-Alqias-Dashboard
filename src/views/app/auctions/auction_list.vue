@@ -84,9 +84,10 @@
                     props.rowData,
                     props.rowData.id,
                     props.rowData.auction_type_value
-                  )"
+                  )
+                "
               >
-                <i  class="simple-icon-arrow-right"></i>
+                <i class="simple-icon-arrow-right"></i>
                 <!-- <b-tooltip
                   target="edit"
                   placement="top"
@@ -366,24 +367,24 @@
 </template>
 <script>
 import Vuetable from "vuetable-2/src/components/Vuetable";
-import deleteModal from "../../../components/shared/deleteModal.vue"
+import deleteModal from "../../../components/shared/deleteModal.vue";
 import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap.vue";
 import DatatableHeading from "../../../containers/datatable/DatatableHeading.vue";
 import { mapGetters, mapActions } from "vuex";
 import { getCurrentLanguage, getCurrentUser } from "../../../utils";
-import * as moment from 'moment'
+import * as moment from "moment";
 import Switches from "vue-switches";
 import googleMaps from "../../../components/shared/googleMaps.vue";
 import router from "../../../router";
 import { adminRoot } from "../../../constants/config";
 export default {
   components: {
-    googleMaps : googleMaps,
+    googleMaps: googleMaps,
     vuetable: Vuetable,
-    'deleteModal': deleteModal,
+    deleteModal: deleteModal,
     "vuetable-pagination-bootstrap": VuetablePaginationBootstrap,
     "datatable-heading": DatatableHeading,
-     switches: Switches
+    switches: Switches
   },
   data() {
     return {
@@ -395,12 +396,12 @@ export default {
       search: null,
       langs: [],
       enable_details: false,
-           modalName: null,
+      modalName: null,
       hideModel: false,
       active_test: false,
       subCategoryName: null,
       auctionId: null,
-            location: [],
+      location: [],
 
       isLoad: false,
       apiBase: "/cakes/fordatatable",
@@ -412,24 +413,29 @@ export default {
       language: null,
       enableModalBtn: false,
       limit: null,
-       sortOptions: [
-         {
-        column: null,
-        label: "All"
-      },
+      sortOptions: [
         {
-            column: 1,
-            label: 'inProgress'
+          column: null,
+          label: "All"
         },
-          {
-            column: 2,
-            label: 'upComing'
+        {
+          column: 1,
+          label: "inProgress"
         },
-          {
-            column: 3,
-            label: 'ended'
+        {
+          column: 2,
+          label: "upComing"
         },
-       ],
+        {},
+        {
+          column: 2,
+          label: "pending"
+        },
+        {
+          column: 3,
+          label: "ended"
+        }
+      ],
       auction_id: null,
       perPage: 8,
       auction: null,
@@ -443,7 +449,7 @@ export default {
       selectedItems: [],
 
       fields: [
-         {
+        {
           name: "id",
           title: "NO.",
           titleClass: "",
@@ -458,21 +464,28 @@ export default {
           },
           title: "Title",
           titleClass: "",
-          dataClass: "list-item-heading",
+          dataClass: "list-item-heading"
         },
 
         {
           name: "",
           callback: value => {
-
-            return  `<span>
-                ${new Date(value.start_date).toString().slice(new Date(value.start_date).toString().indexOf(' '),
-  new Date(value.start_date).toString().lastIndexOf(':'),)}
+            return `<span>
+                ${new Date(value.start_date)
+                  .toString()
+                  .slice(
+                    new Date(value.start_date).toString().indexOf(" "),
+                    new Date(value.start_date).toString().lastIndexOf(":")
+                  )}
               </span>
               <br/>
               <span>
-               ${new Date(value.end_date).toString().slice(new Date(value.end_date).toString().indexOf(' '),
-  new Date(value.end_date).toString().lastIndexOf(':'),)}
+               ${new Date(value.end_date)
+                 .toString()
+                 .slice(
+                   new Date(value.end_date).toString().indexOf(" "),
+                   new Date(value.end_date).toString().lastIndexOf(":")
+                 )}
 
               </span>
               `;
@@ -492,21 +505,21 @@ export default {
           dataClass: "list-item-heading",
           width: "10%"
         },
-          {
+        {
           name: "bids_count",
           title: "Bidds",
           titleClass: "",
           dataClass: "list-item-heading",
           width: "5%"
         },
-           {
+        {
           name: "auction_type",
-           callback: value => {
-
-            return `<span class="badge badge-pill badge-${value.split(' ')[0]} handle mr-1">
+          callback: value => {
+            return `<span class="badge badge-pill badge-${
+              value.split(" ")[0]
+            } handle mr-1">
                 ${value}
               </span>`;
-
           },
           title: "Status",
           titleClass: "",
@@ -515,11 +528,18 @@ export default {
         },
         {
           name: "",
-           callback: value => {
-            return `<b-button class="${value.active === 1 ? `toggle_btn_on_${this.language}`: `toggle_btn_off_${this.language}`}" variant="primary">
-              <span class="${value.active === 1 ? `toggle_span_on_${this.language}`: `toggle_span_off_${this.language}`}"></span>
+          callback: value => {
+            return `<b-button class="${
+              value.active === 1
+                ? `toggle_btn_on_${this.language}`
+                : `toggle_btn_off_${this.language}`
+            }" variant="primary">
+              <span class="${
+                value.active === 1
+                  ? `toggle_span_on_${this.language}`
+                  : `toggle_span_off_${this.language}`
+              }"></span>
         </b-button>`;
-
           },
           title: "Activate",
           titleClass: "",
@@ -554,7 +574,13 @@ export default {
     });
   },
   methods: {
-    ...mapActions(["getAuctions", "deleteAuction", "updateAuctionStatus", "getCategory", "getSubCategory"]),
+    ...mapActions([
+      "getAuctions",
+      "deleteAuction",
+      "updateAuctionStatus",
+      "getCategory",
+      "getSubCategory"
+    ]),
 
     onRowClass(dataItem, index) {
       if (this.selectedItems.includes(dataItem.id)) {
@@ -563,17 +589,17 @@ export default {
       return "";
     },
 
-    modify(auction,id, type) {
-      if(type === 2){
-this.$router.push({
-        path: `${adminRoot}/auctions/auction`,
-        query: { id: id }
-      });
-      }else{
+    modify(auction, id, type) {
+      if (type === 2) {
         this.$router.push({
-        path: `${adminRoot}/auctions/auction-review`,
-        query: { id: id }
-      });
+          path: `${adminRoot}/auctions/auction`,
+          query: { id: id }
+        });
+      } else {
+        this.$router.push({
+          path: `${adminRoot}/auctions/auction-review`,
+          query: { id: id }
+        });
         // this.getCategory({ id: auction.category_id })
         // this.getSubCategory({ id: auction.sub_category_id })
         // this.langs = [];
@@ -587,37 +613,38 @@ this.$router.push({
         //     value: auction.locales[key]
         //   })
         // );
-// });
+        // });
         // this.$refs['auction_details'].show();
       }
-
     },
 
     rowClicked(dataItem, field, event) {
-      if( field.srcElement.localName === 'span' || field.srcElement.localName === 'b-button'){
-        if( field.srcElement.classList[0] !== 'badge'){
-        if(dataItem.auction_type_value === 2){
-          this.open_model('activeAuction', dataItem.id, dataItem.active)
-        }else{
-          this.$notify(
-        "error",
-        "Operation failed",
-        "You can't update status for auction anymore",
-        { duration: 3000, permanent: false }
-      );
-        }
+      if (
+        field.srcElement.localName === "span" ||
+        field.srcElement.localName === "b-button"
+      ) {
+        if (field.srcElement.classList[0] !== "badge") {
+          if (dataItem.auction_type_value === 2) {
+            this.open_model("activeAuction", dataItem.id, dataItem.active);
+          } else {
+            this.$notify(
+              "error",
+              "Operation failed",
+              "You can't update status for auction anymore",
+              { duration: 3000, permanent: false }
+            );
+          }
         }
       }
     },
-      open_model(refname, id, active) {
-              this.enableModalBtn= false;
+    open_model(refname, id, active) {
+      this.enableModalBtn = false;
 
       this.$refs[refname].show();
       this.auctionId = id;
       if (active != null) {
-this.active = active
+        this.active = active;
       }
-
     },
     rightClicked(dataItem, field, event) {
       event.preventDefault();
@@ -635,9 +662,8 @@ this.active = active
       this.items = paginationData.data;
       this.$refs.pagination.setPaginationData(paginationData);
     },
-     formatDate(d) {
-
-        return moment(d).format("MMM Do YYYY");
+    formatDate(d) {
+      return moment(d).format("MMM Do YYYY");
     },
     dataManager(sortOrder, pagination) {
       if (sortOrder.length > 0) {
@@ -648,7 +674,7 @@ this.active = active
             dir: this.dir,
             auction_owner: this.$route.query.owner_id,
             sorting: true,
-             auctionType: this.auctionType_id,
+            auctionType: this.auctionType_id,
             search: this.search,
             order_by: this.order_by,
             limit: this.limit,
@@ -671,20 +697,19 @@ this.active = active
         }
       }
     },
-       set_location(data) {
-    },
+    set_location(data) {},
     delete_auction() {
-      this.enableModalBtn= true;
+      this.enableModalBtn = true;
       this.deleteAuction({ Id: this.auctionId });
     },
-    active_auction(){
-      this.enableModalBtn= true;
+    active_auction() {
+      this.enableModalBtn = true;
       this.updateAuctionStatus({
-            active : this.active === 1 ? 0 : 1,
-            id: this.auctionId
-          });
+        active: this.active === 1 ? 0 : 1,
+        id: this.auctionId
+      });
     },
-    open_link(link){
+    open_link(link) {
       window.open(link);
     },
     hideModal(refname) {
@@ -732,10 +757,10 @@ this.active = active
       });
     },
 
-    changeOrderBy(sort){
-      this.sort = sort
+    changeOrderBy(sort) {
+      this.sort = sort;
       this.auctionType_id = sort.column;
-    this.getAuctions({
+      this.getAuctions({
         dir: null,
         auction_owner: this.$route.query.owner_id,
         auctionType: sort.column,
@@ -771,17 +796,20 @@ this.active = active
       return -1;
     },
 
-    onContextMenuAction(action) {
-
-    },
+    onContextMenuAction(action) {},
     add_New() {
       this.$router.push({
         path: `${adminRoot}/auctions/auction`
       });
     },
-        toDateFormat(value){
-     return value.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
-    },
+    toDateFormat(value) {
+      return value.toLocaleDateString("en-us", {
+        weekday: "long",
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+    }
   },
   computed: {
     ...mapGetters([
@@ -810,16 +838,15 @@ this.active = active
     }
   },
   watch: {
-    active_test: function(val){
-    },
+    active_test: function(val) {},
     searchChange(newQuestion, oldQuestion) {
       if (newQuestion) {
       }
     },
-    _deleteAuctionError: function(val){
-       this.enableModalBtn= false;
-      this.$refs['deleteAuction'].hide();
-this.$notify(
+    _deleteAuctionError: function(val) {
+      this.enableModalBtn = false;
+      this.$refs["deleteAuction"].hide();
+      this.$notify(
         "error",
         "Operation failed",
         "You can't delete this auction since it started",
@@ -827,9 +854,9 @@ this.$notify(
       );
     },
     _successDeleteAuction(newVal, old) {
-      this.enableModalBtn= false;
-      this.hideModel = !this.hideModel
-      this.$refs['deleteAuction'].hide();
+      this.enableModalBtn = false;
+      this.hideModel = !this.hideModel;
+      this.$refs["deleteAuction"].hide();
       this.$notify(
         "success",
         "Operation completed successfully",
@@ -846,9 +873,9 @@ this.$notify(
         page: this.page
       });
     },
-    _updatedAuctionUnSuccessfuly: function(val){
-      this.$refs['activeAuction'].hide();
-      this.enableModalBtn= true;
+    _updatedAuctionUnSuccessfuly: function(val) {
+      this.$refs["activeAuction"].hide();
+      this.enableModalBtn = true;
 
       this.$notify(
         "error",
@@ -860,9 +887,9 @@ this.$notify(
     auctions(newList, old) {
       this.$refs.vuetable.setData(newList);
     },
-     _updatedAuctionSuccessfuly(newInfo, oldOne) {
-      this.enableModalBtn= true;
-            this.$refs['activeAuction'].hide();
+    _updatedAuctionSuccessfuly(newInfo, oldOne) {
+      this.enableModalBtn = true;
+      this.$refs["activeAuction"].hide();
 
       this.$notify(
         "success",
@@ -871,7 +898,7 @@ this.$notify(
         { duration: 3000, permanent: false }
       );
 
-          this.getAuctions({
+      this.getAuctions({
         dir: this.dir,
         search: this.search,
         auction_owner: this.$route.query.owner_id,
@@ -880,13 +907,12 @@ this.$notify(
         limit: this.limit,
         page: this.page
       });
-
     },
-    _category: function(val){
-        this.categoryName = val.locales[this.language].name
+    _category: function(val) {
+      this.categoryName = val.locales[this.language].name;
     },
-     _getSubCategorySuccess: function(val){
-        this.subCategoryName = val.data.locales[this.language].name
+    _getSubCategorySuccess: function(val) {
+      this.subCategoryName = val.data.locales[this.language].name;
     },
     auction_paginations(newActions, old) {
       this.perPage = newActions.per_page;

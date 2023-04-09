@@ -3318,7 +3318,7 @@ this.date_check();
             this.categoryCustomFieldOptions = [];
 
        if (this.auctionId) {
-          this.customFields = this.getDifference(val, this.custom_fields);
+        this.customFields = this.getDifference(val, this.custom_fields);
         this.customFields.forEach(option => {
         this.categoryCustomFieldOptions.push(
           new Object({

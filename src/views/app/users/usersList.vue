@@ -40,17 +40,14 @@
             @vuetable:row-clicked="rowClicked"
           >
             <template slot="actions" slot-scope="props">
-           
               <b-button
                 variant="outline-theme-3"
                 id="edit"
                 class="icon-button-auction"
                 @click="modify(props.rowData.id, props.rowData.first_name)"
               >
-                <i  class="simple-icon-arrow-right"></i>
-                
+                <i class="simple-icon-arrow-right"></i>
               </b-button>
-             
             </template>
           </vuetable>
           <vuetable-pagination-bootstrap
@@ -201,11 +198,8 @@ export default {
         },
         {
           name: "active",
-           callback: value => {
-            return `<b-button class="${value === 1 ? `toggle_btn_on_${this.language}`: `toggle_btn_off_${this.language}`}" variant="primary">
-              <span class="${value === 1 ? `toggle1_span_on_${this.language}`: `toggle1_span_off_${this.language}`}"></span>
-        </b-button>`;
-
+          callback: value => {
+            return value === 1 ? "active" : "unactive";
           },
           sortField: "active",
           title: "Active",
@@ -242,7 +236,7 @@ export default {
             search: null,
             order_by: null,
             limit: null,
-            page: null 
+            page: null
           });
           break;
         case "accountant":
@@ -308,9 +302,12 @@ export default {
       this.$refs[refname].hide();
     },
     rowClicked(dataItem, field) {
-      if( field.srcElement.localName === 'span' || field.srcElement.localName === 'b-button'){
-        if( field.srcElement.classList[0] !== 'badge'){       
-          this.open_model('activeModal', dataItem.id, dataItem.active)
+      if (
+        field.srcElement.localName === "span" ||
+        field.srcElement.localName === "b-button"
+      ) {
+        if (field.srcElement.classList[0] !== "badge") {
+          this.open_model("activeModal", dataItem.id, dataItem.active);
         }
       }
     },
@@ -374,7 +371,7 @@ export default {
         });
       }
     },
-    open_model(refname,id, active ) {
+    open_model(refname, id, active) {
       this.$refs[refname].show();
       this.userId = id;
       this.active = active;
